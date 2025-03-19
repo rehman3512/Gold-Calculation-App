@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class GoldApp extends StatefulWidget {
   const GoldApp({super.key});
@@ -20,6 +21,131 @@ class _GoldAppState extends State<GoldApp> {
   double rattip=0;
   double pointp=0;
 
+  // Function
+  // 1st function refreshed button
+  void refreshed()
+  {
+    if(tolapriceController.text=="" && tolaquantityController.text==" "
+        && mashaQuantityController.text==" " && rattiQuantityController.text==" "
+        && pointQuantityContoller.text==" ")
+    {
+      Get.defaultDialog(
+        title: "Information",
+        content: Text("The field is already empty"),
+        actions: [
+          Column(children: [
+            Icon(Icons.info,color: Colors.red,),
+            TextButton(onPressed: (){
+              Get.back();
+              setState(() {
+
+              });
+            }, child: Text("Ok")),
+          ],),
+        ],
+      );
+    }
+    else
+    {
+      Get.defaultDialog(
+        title: "information",
+        content: Text("Are you sure you want to refresh it"),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                child: TextButton(onPressed: (){
+                  Get.back();
+                  setState(() {
+
+                  });
+                }, child: Text("No")),
+              ),
+              Container(
+                child: TextButton(onPressed: (){
+                  tolapriceController.clear();
+                  tolaquantityController.clear();
+                  mashaQuantityController.clear();
+                  rattiQuantityController.clear();
+                  pointQuantityContoller.clear();
+                  setState(() {
+
+                  });
+                }, child: Text("Yes"),),
+              ),
+            ],)
+        ],
+      );
+    }
+  }
+  // 2nd function calculation button
+  void calculate()
+  {
+    if (tolapriceController.text==" ")
+    {
+      Get.snackbar(
+          "Error","Please enter gold price",colorText: Colors.deepOrange,
+          backgroundColor: Colors.white,
+          icon: Icon(Icons.warning,color: Colors.red,)
+      );
+    }
+    else
+    {
+      if(tolaquantityController.text==" ")
+      {
+        tolaquantityController.text='0';
+      }
+      if(mashaQuantityController.text==" ")
+      {
+        mashaQuantityController.text='0';
+      }
+      if(rattiQuantityController.text==" ")
+      {
+        rattiQuantityController.text='0';
+      }
+      if(pointQuantityContoller.text==" ")
+      {
+        pointQuantityContoller.text='0';
+      }
+    }
+
+    double tolaprice;
+    double tolaquantity;
+    double mashaprice;
+    double mashaquantity;
+    double totalmashaprice;
+    double rattiQuantity;
+    double rattiprice;
+    double totalrattiprice;
+    double pointQuantity;
+    double pointprice;
+    double totalpointprice;
+
+    tolaprice = double.parse(tolapriceController.text);
+    tolaquantity = double.parse(tolaquantityController.text);
+    mashaquantity = double.parse(mashaQuantityController.text);
+    rattiQuantity = double.parse(rattiQuantityController.text);
+    pointQuantity = double.parse(pointQuantityContoller.text);
+    mashaprice = tolaprice/12;
+    totalmashaprice = mashaquantity*mashaprice;
+    rattiprice = tolaprice/96;
+    totalrattiprice = rattiQuantity*rattiprice;
+    pointprice = tolaprice/217;
+    totalpointprice = pointQuantity*pointprice;
+
+    total = (tolaprice*tolaquantity)+totalmashaprice+
+        totalrattiprice+totalpointprice;
+    tolap = tolaquantity*tolaprice;
+    mashap = totalmashaprice;
+    rattip = totalrattiprice;
+    pointp = totalpointprice;
+
+    setState(() {
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +155,13 @@ class _GoldAppState extends State<GoldApp> {
         title: Text('GOLDAPP',style: TextStyle(color: Colors.white,fontSize: 30,
           fontWeight: FontWeight.bold,letterSpacing: 2,
         ),),
+      ),
+      floatingActionButton: FloatingActionButton(onPressed: (){
+        refreshed();
+      },
+       backgroundColor: Color(0xFFD4AF37),
+      child: Center(child: Icon(Icons.refresh,
+        color: Colors.white,),),
       ),
       body: SingleChildScrollView(
         child: Center(child: Column(children: [
@@ -128,41 +261,7 @@ class _GoldAppState extends State<GoldApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               InkWell(onTap: (){
-                double tolaprice;
-                double tolaquantity;
-                double mashaprice;
-                double mashaquantity;
-                double totalmashaprice;
-                double rattiQuantity;
-                double rattiprice;
-                double totalrattiprice;
-                double pointQuantity;
-                double pointprice;
-                double totalpointprice;
-
-                tolaprice = double.parse(tolapriceController.text);
-                tolaquantity = double.parse(tolaquantityController.text);
-                mashaquantity = double.parse(mashaQuantityController.text);
-                rattiQuantity = double.parse(rattiQuantityController.text);
-                pointQuantity = double.parse(pointQuantityContoller.text);
-                mashaprice = tolaprice/12;
-                totalmashaprice = mashaquantity*mashaprice;
-                rattiprice = tolaprice/96;
-                totalrattiprice = rattiQuantity*rattiprice;
-                pointprice = tolaprice/217;
-                totalpointprice = pointQuantity*pointprice;
-
-                total = (tolaprice*tolaquantity)+totalmashaprice+
-                    totalrattiprice+totalpointprice;
-                tolap = tolaquantity*tolaprice;
-                mashap = totalmashaprice;
-                rattip = totalrattiprice;
-                pointp = totalpointprice;
-
-                setState(() {
-
-                });
-
+                calculate();
               },
                 child: Container(height: 45, width: 140,
                   decoration: BoxDecoration(
@@ -177,27 +276,27 @@ class _GoldAppState extends State<GoldApp> {
                   ),),
                 ),),
               SizedBox(width : 10,),
-              InkWell(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>GoldApp(),
-                  ),);
-
-                  setState(() {
-
-                  });
-                },
-                child: Container(height: 45,width: 140,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFD4AF37),
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(child: Text('Refresh',style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),),),
-                ),
-              )
+              // InkWell(
+              //   onTap: (){
+              //     Navigator.push(context, MaterialPageRoute(builder: (context)=>GoldApp(),
+              //     ),);
+              //
+              //     setState(() {
+              //
+              //     });
+              //   },
+              //   child: Container(height: 45,width: 140,
+              //     decoration: BoxDecoration(
+              //       color: Color(0xFFD4AF37),
+              //       border: Border.all(color: Colors.white),
+              //       borderRadius: BorderRadius.circular(10),
+              //     ),
+              //     child: Center(child: Text('Refresh',style: TextStyle(
+              //       color: Colors.white,
+              //       fontSize: 20,
+              //     ),),),
+              //   ),
+              // )
             ],),
           SizedBox(height: 30,),
           Text('Total Tola Price=$tolap',style: TextStyle(fontWeight: FontWeight.w600),),
